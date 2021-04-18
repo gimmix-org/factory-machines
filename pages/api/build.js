@@ -9,8 +9,9 @@ const api = async (req, res) => {
   if (req.method == 'POST') {
     const { config } = req.body;
     const tmpPath = `/tmp/${config.contractAddress}`;
-    console.log({ config });
-    if (await !fs.access(`${tmpPath}/site.zip`)) {
+    try {
+      await fs.access(`${tmpPath}/site.zip`);
+    } catch (err) {
       await copydir(`templates/${config.template}`, tmpPath, {});
       await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
       await exec(`cd ${tmpPath} && yarn`);
