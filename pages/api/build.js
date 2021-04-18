@@ -16,7 +16,7 @@ const api = async (req, res) => {
       await exec(`cd ${tmpPath} && yarn build && yarn export`);
       await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
     }
-    return res.send({ built: true });
+    return res.json({ built: true });
   } else {
     const { contractAddress } = req.query;
     const tmpPath = `/tmp/${contractAddress}`;
