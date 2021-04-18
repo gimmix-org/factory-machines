@@ -2,10 +2,11 @@ import _copydir from 'copy-dir';
 import { promisify } from 'util';
 import { exec as _exec } from 'child_process';
 import fs from 'fs/promises';
+import { NextApiHandler } from 'next';
 const copydir = promisify(_copydir);
 const exec = promisify(_exec);
 
-const api = async (req, res) => {
+const api: NextApiHandler = async (req, res) => {
   if (req.method == 'POST') {
     const { config } = req.body;
     const tmpPath = `/tmp/${config.contractAddress}`;
@@ -31,7 +32,7 @@ const api = async (req, res) => {
 
 export default api;
 
-const build = async config => {
+const build = async (config: any) => {
   console.log('Building', { config });
   const tmpPath = `/tmp/${config.contractAddress}`;
   await copydir(`templates/${config.template}`, tmpPath, {});
@@ -41,7 +42,7 @@ const build = async config => {
   await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
 };
 
-const factoryConfig = config =>
+const factoryConfig = (config: any) =>
   `module.exports = {
     name: '${config.name}',
     description: '${config.description}',
@@ -54,5 +55,5 @@ const factoryConfig = config =>
     ipfsBase: '${config.ipfsBase}',
     ipfsUploadFile: '${config.ipfsUploadFile}',
     ipfsUploadJson: '${config.ipfsUploadJson}',
-    infuraUrl: '${config.infuraUrl}'
+    rpcUrl: '${config.rpcUrl}'
   };`;

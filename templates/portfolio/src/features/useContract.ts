@@ -9,7 +9,7 @@ const useContract = () => {
     factoryConfig.contractAddress,
     !!provider && network?.chainId == factoryConfig.chainId
       ? provider.getSigner()
-      : new JsonRpcProvider(factoryConfig.infuraUrl)
+      : new JsonRpcProvider(factoryConfig.rpcUrl)
   );
 
   return contract;
