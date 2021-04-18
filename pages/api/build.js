@@ -35,11 +35,13 @@ export default api;
 const build = async config => {
   console.log('Building', { config });
   const tmpPath = `/tmp/${config.contractAddress}`;
-  await copydir(`templates/${config.template}`, tmpPath, {});
-  await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
-  await exec(`cd ${tmpPath} && yarn`);
-  await exec(`cd ${tmpPath} && yarn build && yarn export`);
-  await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
+  console.log(await copydir(`templates/${config.template}`, tmpPath, {}));
+  consolel.og(
+    await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config))
+  );
+  console.log(await exec(`cd ${tmpPath} && yarn`));
+  console.log(await exec(`cd ${tmpPath} && yarn build && yarn export`));
+  console.log(await exec(`cd ${tmpPath} && zip -r site.zip ./out`));
 };
 
 const factoryConfig = config =>
