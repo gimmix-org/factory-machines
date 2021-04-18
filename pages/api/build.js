@@ -2,6 +2,7 @@ import _copydir from 'copy-dir';
 import { promisify } from 'util';
 import { exec as _exec } from 'child_process';
 import fs from 'fs/promises';
+import NextCors from 'nextjs-cors';
 const copydir = promisify(_copydir);
 const exec = promisify(_exec);
 
@@ -14,11 +15,11 @@ const api = async (req, res) => {
     `cd ${tmpPath} && yarn && yarn build && yarn export && zip -r site.zip ./out`
   );
   const file = await fs.readFile(`${tmpPath}/site.zip`);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
+  await NextCors(req, res, {
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    origin: '*',
+    optionsSuccessStatus: 200
+  });
   res.setHeader('content-type', 'application/zip');
   return res.send(file);
 };
