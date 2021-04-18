@@ -13,8 +13,12 @@ const api = async (req, res) => {
   const data = await exec(
     `cd ${tmpPath} && yarn && yarn build && yarn export && zip -r site.zip ./out`
   );
-  console.log(data);
   const file = await fs.readFile(`${tmpPath}/site.zip`);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
   res.setHeader('content-type', 'application/zip');
   return res.send(file);
 };
