@@ -9,6 +9,7 @@ const api = async (req, res) => {
   if (req.method == 'POST') {
     const { config } = req.body;
     const tmpPath = `/tmp/${config.contractAddress}`;
+    console.log({ config });
     if (!fs.access(`${tmpPath}/site.zip`)) {
       await copydir(`templates/${config.template}`, tmpPath, {});
       await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
