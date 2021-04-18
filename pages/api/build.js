@@ -8,12 +8,11 @@ const exec = promisify(_exec);
 const api = async (req, res) => {
   if (req.method == 'POST') {
     const { config } = req.body;
-    console.log('Posting', { config });
     const tmpPath = `/tmp/${config.contractAddress}`;
     try {
       await fs.access(`${tmpPath}/site.zip`);
     } catch (err) {
-      build(config);
+      await build(config);
     }
     return res.json({ built: true });
   } else {
@@ -35,13 +34,11 @@ export default api;
 const build = async config => {
   console.log('Building', { config });
   const tmpPath = `/tmp/${config.contractAddress}`;
-  console.log(await copydir(`templates/${config.template}`, tmpPath, {}));
-  console.log(
-    await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config))
-  );
-  console.log(await exec(`cd ${tmpPath} && yarn`));
-  console.log(await exec(`cd ${tmpPath} && yarn build && yarn export`));
-  console.log(await exec(`cd ${tmpPath} && zip -r site.zip ./out`));
+  await copydir(`templates/${config.template}`, tmpPath, {});
+  await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
+  await exec(`cd ${tmpPath} && yarn`);
+  await exec(`cd ${tmpPath} && yarn build && yarn export`);
+  await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
 };
 
 const factoryConfig = config =>
