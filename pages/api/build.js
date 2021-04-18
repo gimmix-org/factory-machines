@@ -8,6 +8,7 @@ const exec = promisify(_exec);
 const api = async (req, res) => {
   if (req.method == 'POST') {
     const { config } = req.body;
+    console.log('Posting', { config });
     const tmpPath = `/tmp/${config.contractAddress}`;
     try {
       await fs.access(`${tmpPath}/site.zip`);
@@ -32,6 +33,7 @@ const api = async (req, res) => {
 export default api;
 
 const build = async config => {
+  console.log('Building', { config });
   const tmpPath = `/tmp/${config.contractAddress}`;
   await copydir(`templates/${config.template}`, tmpPath, {});
   await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
