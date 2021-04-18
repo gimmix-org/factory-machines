@@ -2,26 +2,29 @@ import _copydir from 'copy-dir';
 import { promisify } from 'util';
 import { exec as _exec } from 'child_process';
 import fs from 'fs/promises';
-import NextCors from 'nextjs-cors';
 const copydir = promisify(_copydir);
 const exec = promisify(_exec);
 
 const api = async (req, res) => {
-  const { config } = req.body;
-  const tmpPath = `/tmp/${config.contractAddress}`;
-  await copydir(`templates/${config.template}`, tmpPath, {});
-  await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
-  const data = await exec(
-    `cd ${tmpPath} && yarn && yarn build && yarn export && zip -r site.zip ./out`
-  );
-  const file = await fs.readFile(`${tmpPath}/site.zip`);
-  await NextCors(req, res, {
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    origin: '*',
-    optionsSuccessStatus: 200
-  });
-  res.setHeader('content-type', 'application/zip');
-  return res.send(file);
+  if (req.method == 'POST') {
+    const { config } = req.body;
+    const tmpPath = `/tmp/${config.contractAddress}`;
+    if (!fs.access(`${tmpPath}/site.zip`)) {
+      await copydir(`templates/${config.template}`, tmpPath, {});
+      await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
+      await exec(`cd ${tmpPath} && yarn`);
+      await exec(`cd ${tmpPath} && yarn build && yarn export`);
+      await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
+    }
+    return res.send({ built: true });
+  } else {
+    const { contractAddress } = req.query;
+    const tmpPath = `/tmp/${contractAddress}`;
+    const file = await fs.readFile(`${tmpPath}/site.zip`);
+    res.setHeader('content-type', 'application/zip');
+    res.setHeader('Cache-Control', 's-maxage=216000');
+    return res.send(file);
+  }
 };
 
 export default api;
