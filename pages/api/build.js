@@ -11,9 +11,12 @@ const api = async (req, res) => {
   await copydir(`templates/${config.template}`, tmpPath, {});
   await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
   const data = await exec(
-    `cd ${tmpPath} && npm install && npm run build && npm run export`
+    `cd ${tmpPath} && yarn && yarn build && yarn export && zip -r site.zip ./out`
   );
-  return res.json({ data, config });
+  console.log(data);
+  const file = await fs.readFile(`${tmpPath}/site.zip`);
+  res.setHeader('content-type', 'application/zip');
+  return res.send(file);
 };
 
 export default api;
