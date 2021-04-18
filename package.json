@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "update": "forever stop 0 && forever start -c \"yarn start\" ./"
   },
   "dependencies": {
     "copy-dir": "^1.3.0",
