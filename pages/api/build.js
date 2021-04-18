@@ -12,24 +12,33 @@ const api = async (req, res) => {
     try {
       await fs.access(`${tmpPath}/site.zip`);
     } catch (err) {
-      await copydir(`templates/${config.template}`, tmpPath, {});
-      await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
-      await exec(`cd ${tmpPath} && yarn`);
-      await exec(`cd ${tmpPath} && yarn build && yarn export`);
-      await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
+      build(config);
     }
     return res.json({ built: true });
   } else {
     const { contractAddress } = req.query;
     const tmpPath = `/tmp/${contractAddress}`;
-    const file = await fs.readFile(`${tmpPath}/site.zip`);
-    res.setHeader('content-type', 'application/zip');
-    res.setHeader('Cache-Control', 's-maxage=216000');
-    return res.send(file);
+    try {
+      const file = await fs.readFile(`${tmpPath}/site.zip`);
+      res.setHeader('content-type', 'application/zip');
+      res.setHeader('Cache-Control', 's-maxage=216000');
+      return res.send(file);
+    } catch (err) {
+      return res.json({ error: 'Not found' });
+    }
   }
 };
 
 export default api;
+
+const build = async config => {
+  const tmpPath = `/tmp/${config.contractAddress}`;
+  await copydir(`templates/${config.template}`, tmpPath, {});
+  await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
+  await exec(`cd ${tmpPath} && yarn`);
+  await exec(`cd ${tmpPath} && yarn build && yarn export`);
+  await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
+};
 
 const factoryConfig = config =>
   `module.exports = {
