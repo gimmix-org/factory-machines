@@ -36,7 +36,7 @@ const build = async config => {
   console.log('Building', { config });
   const tmpPath = `/tmp/${config.contractAddress}`;
   console.log(await copydir(`templates/${config.template}`, tmpPath, {}));
-  consolel.og(
+  console.log(
     await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config))
   );
   console.log(await exec(`cd ${tmpPath} && yarn`));
