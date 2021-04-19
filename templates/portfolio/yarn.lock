@@ -529,10 +529,10 @@
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
 
-"@gimmixfactory/contracts@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@gimmixfactory/contracts/-/contracts-0.0.7.tgz#065bd6462d4ae60558cc21b6fdab4f7232d2dfeb"
-  integrity sha512-3/vIvbdLI4d+62oUMnwBktG9+AiuI1PVQUyN+z9d/efNbf8AmA6Hhk55SmhLZuHT4KsHDxKsONeY7ET4u+ppGQ==
+"@gimmixfactory/contracts@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@gimmixfactory/contracts/-/contracts-0.0.8.tgz#e65354fc2843881273c478f1231ff1780159bd1a"
+  integrity sha512-STUExauem17F6brjWUvnrMN4J8C+VYX2LPpVCbTmHjahIIZhYBqMLETby5Xm+ANN2zd9vUDUGwYIZcXi7cazOA==
 
 "@gimmixfactory/use-wallet@^0.0.11":
   version "0.0.11"
