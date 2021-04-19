@@ -13,6 +13,7 @@ const api: NextApiHandler = async (req, res) => {
     try {
       await fs.access(`${tmpPath}/site.zip`);
     } catch (err) {
+      console.log({ err });
       await build(config);
     }
     return res.json({ built: true });
@@ -25,6 +26,7 @@ const api: NextApiHandler = async (req, res) => {
       res.setHeader('Cache-Control', 's-maxage=216000');
       return res.send(file);
     } catch (err) {
+      console.log({ err });
       return res.json({ error: 'Not found' });
     }
   }
@@ -34,12 +36,16 @@ export default api;
 
 const build = async (config: any) => {
   console.log('Building', { config });
-  const tmpPath = `/tmp/${config.contractAddress}`;
-  await copydir(`templates/${config.template}`, tmpPath, {});
-  await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
-  await exec(`cd ${tmpPath} && yarn`);
-  await exec(`cd ${tmpPath} && yarn build && yarn export`);
-  await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
+  try {
+    const tmpPath = `/tmp/${config.contractAddress}`;
+    await copydir(`templates/${config.template}`, tmpPath, {});
+    await fs.writeFile(`${tmpPath}/factory.config.js`, factoryConfig(config));
+    await exec(`cd ${tmpPath} && yarn`);
+    await exec(`cd ${tmpPath} && yarn build && yarn export`);
+    await exec(`cd ${tmpPath} && zip -r site.zip ./out`);
+  } catch (err) {
+    console.log({ buildError: err });
+  }
 };
 
 const factoryConfig = (config: any) =>
