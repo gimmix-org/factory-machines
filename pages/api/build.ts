@@ -7,6 +7,7 @@ const copydir = promisify(_copydir);
 const exec = promisify(_exec);
 
 const api: NextApiHandler = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://factory.gimmix.org');
   if (req.method == 'POST') {
     const { config } = req.body;
     const tmpPath = `/tmp/${config.contractAddress}`;
