@@ -5,14 +5,18 @@ import factoryConfig from '../../factory.config';
 
 const useContract = () => {
   const { provider, network } = useWallet();
-  const contract = Portfolio__factory.connect(
-    factoryConfig.contractAddress,
-    !!provider && network?.chainId == factoryConfig.chainId
-      ? provider.getSigner()
-      : new JsonRpcProvider(factoryConfig.rpcUrl)
-  );
-
-  return contract;
+  if (!provider || !factoryConfig.rpcUrl) return null;
+  try {
+    const contract = Portfolio__factory.connect(
+      factoryConfig.contractAddress,
+      !!provider && network?.chainId == factoryConfig.chainId
+        ? provider.getSigner()
+        : new JsonRpcProvider(factoryConfig.rpcUrl)
+    );
+    return contract;
+  } catch (err) {
+    return null;
+  }
 };
 
 export default useContract;

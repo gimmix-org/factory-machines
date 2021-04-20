@@ -12,6 +12,7 @@ export type NFT = {
 const useNFT = (tokenId: number) => {
   const [nft, setNFT] = useState<NFT>();
   const contract = useContract();
+  if (!contract) return null;
   useEffect(() => {
     contract.tokenURI(tokenId).then(async _uri => {
       const uri = _uri.replace('ipfs://', factoryConfig.ipfsBase);
