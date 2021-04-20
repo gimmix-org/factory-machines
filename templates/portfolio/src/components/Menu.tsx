@@ -9,7 +9,7 @@ const Menu: FunctionComponent = () => {
     <div className="menu">
       <div className="top">
         <h1 className="name">
-          <Link href="/">
+          <Link href="./index.html">
             <a>{factoryConfig.name}</a>
           </Link>
         </h1>
