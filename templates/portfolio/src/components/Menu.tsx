@@ -9,7 +9,7 @@ const Menu: FunctionComponent = () => {
     <div className="menu">
       <div className="top">
         <h1 className="name">
-          <IPFSLink href="/index">
+          <IPFSLink href="/">
             <a>{factoryConfig.name}</a>
           </IPFSLink>
         </h1>

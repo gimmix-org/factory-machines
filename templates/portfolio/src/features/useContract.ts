@@ -5,7 +5,7 @@ import factoryConfig from '../../factory.config';
 
 const useContract = () => {
   const { provider, network } = useWallet();
-  if (!provider || !factoryConfig.rpcUrl) return null;
+  if (!provider && !factoryConfig.rpcUrl) return null;
   try {
     const contract = Portfolio__factory.connect(
       factoryConfig.contractAddress,
