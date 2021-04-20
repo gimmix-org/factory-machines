@@ -1,6 +1,6 @@
 {
   "name": "@gimmixfactory/sites-portfolio",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "next --port 5000",
     "build": "next build",
