@@ -1,7 +1,7 @@
 import { Portfolio__factory } from '@gimmixfactory/contracts/dist/typechain';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { useWallet } from '@gimmixfactory/use-wallet';
-import factoryConfig from '../../factory.config';
+import factoryConfig from 'factory.config';
 
 const useContract = () => {
   const { provider, network } = useWallet();

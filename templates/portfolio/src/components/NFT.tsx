@@ -1,23 +1,50 @@
 import React from 'react';
-import factoryConfig from '../../factory.config';
-import useNFT from '../features/useNFT';
+import useNFT from '@features/useNFT';
+import Link from '@components/Link';
 
 const NFT = ({ tokenId }: { tokenId: number }) => {
   const nft = useNFT(tokenId);
   if (!nft) return null;
   return (
     <div className="nft">
-      <img src={nft.image.replace('ipfs://', factoryConfig.ipfsBase)} />
-      <div className="title">{nft.name}</div>
-      <div className="description">{nft.description}</div>
+      <Link href={`/details?id=${tokenId}`}>
+        <a>
+          <img alt={nft.name} src={nft.image} />
+        </a>
+      </Link>
+      <div className="meta">
+        <div className="title">
+          <Link href={`/details?id=${tokenId}`}>
+            <a>{nft.name}</a>
+          </Link>
+        </div>
+        <div className="description">{nft.description}</div>
+      </div>
+
       <style jsx>{`
         .nft {
-          border: 1px solid black;
-          padding: 20px;
+          background-color: #f1f1f1;
+          border-radius: 3px;
+          overflow: hidden;
+        }
+        img {
+          width: 100%;
+          height: auto;
+        }
+        .meta {
+          padding: 10px;
+        }
+        .title {
+          font-weight: 500;
+          margin-bottom: 3px;
+        }
+        .description {
+          font-size: 12px;
+          opacity: 0.6;
         }
       `}</style>
     </div>
   );
 };
 
-export default NFT;
+export default React.memo(NFT);
