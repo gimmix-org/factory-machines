@@ -3,5 +3,5 @@ module.exports = {
     webpack5: true
   },
   assetPrefix: './',
-  exportTrailingSlash: true
+  trailingSlash: true
 };
