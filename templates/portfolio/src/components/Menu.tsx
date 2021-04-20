@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useWallet } from '@gimmixfactory/use-wallet';
-import Link from 'next/link';
+import IPFSLink from '../components/IPFSLink';
 import factoryConfig from '../../factory.config';
 
 const Menu: FunctionComponent = () => {
@@ -9,9 +9,9 @@ const Menu: FunctionComponent = () => {
     <div className="menu">
       <div className="top">
         <h1 className="name">
-          <Link href="./index.html">
+          <IPFSLink href="/index">
             <a>{factoryConfig.name}</a>
-          </Link>
+          </IPFSLink>
         </h1>
         <div className="description">{factoryConfig.description}</div>
       </div>

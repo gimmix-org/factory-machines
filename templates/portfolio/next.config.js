@@ -2,5 +2,6 @@ module.exports = {
   future: {
     webpack5: true
   },
-  assetPrefix: './'
+  assetPrefix: './',
+  exportTrailingSlash: true
 };
