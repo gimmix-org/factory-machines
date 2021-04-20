@@ -30,11 +30,9 @@ const Mint: FunctionComponent = () => {
     e.preventDefault();
     if (!provider || !network || !contract || !fileIPFSHash) return;
     try {
-      const tokenCount = (await contract.totalSupply()).toNumber();
       const metadata = {
         name: title,
         description,
-        external_url: `${factoryConfig.url}/token/${tokenCount + 1}`,
         image: `ipfs://${fileIPFSHash}`
       };
       const { hash: metadataHash } = await fetch(factoryConfig.ipfsUploadJson, {

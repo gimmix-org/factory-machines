@@ -2,21 +2,19 @@
   "name": "@gimmixfactory/sites",
   "version": "0.0.1",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "update": "yarn build && killall node",
-    "forever": "forever start -c \"yarn start\" ./"
+    "dev": "NODE_ENV=development PORT=4000 nodemon src/server.js",
+    "start": "NODE_ENV=production forever start src/server.js",
+    "stop": "NODE_ENV=production forever stop src/server.js"
   },
   "dependencies": {
-    "copy-dir": "^1.3.0",
-    "next": "^10.1.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "bull": "^3.22.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "ipfs": "^0.54.4",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.41",
-    "@types/react": "^17.0.3",
-    "typescript": "^4.2.4"
+    "forever": "^3.0.4",
+    "nodemon": "^2.0.7"
   }
 }
