@@ -73,16 +73,4 @@ const processor = async job => {
 module.exports = processor;
 
 const factoryConfig = config =>
-  `module.exports = {
-    name: '${config.name}',
-    description: '${config.description}',
-  
-    // Don't change anything below this line unless you know what you're doing!
-    contractAddress: '${config.contractAddress}',
-    creatorAddress: '${config.creatorAddress}',
-    chainId: ${config.chainId},
-    ipfsBase: '${config.ipfsBase}',
-    ipfsUploadFile: '${config.ipfsUploadFile}',
-    ipfsUploadJson: '${config.ipfsUploadJson}',
-    rpcUrl: '${config.rpcUrl}'
-  };`;
+  `module.exports = ${JSON.stringify(config, null, 2)};`;
