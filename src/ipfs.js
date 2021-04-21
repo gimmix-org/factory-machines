@@ -7,6 +7,11 @@ IPFS.create().then(_node => {
   node = _node;
 });
 
+const addFile = async filePath => {
+  const { cid } = await node.add(await fs.readFile(filePath));
+  return `ipfs://${cid}`;
+};
+
 const addSite = async sitePath => {
   const results = [];
   let files = await getFiles(sitePath);
@@ -33,4 +38,4 @@ const getFiles = async dir => {
   return Array.prototype.concat(...files);
 };
 
-module.exports = { addSite };
+module.exports = { addFile, addSite };
