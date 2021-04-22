@@ -1,11 +1,26 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useWallet } from '@gimmixfactory/use-wallet';
 import Link from '@components/Link';
 import factoryConfig from 'factory.config';
 import getWalletProviderOptions from '@features/getWalletProviderOptions';
+import useBankPayees from '@features/useBankPayees';
+import useContract from '@features/useContract';
 
 const Menu: FunctionComponent = () => {
   const { connect, account, network } = useWallet();
+  const contract = useContract();
+  const payees = useBankPayees();
+
+  const [withdrawalTx, setWithdrawalTx] = useState<string>();
+  const [withdrawn, setWithdrawn] = useState(false);
+  const withdraw = async () => {
+    if (!contract || !account) return;
+    const tx = await contract.release(account);
+    setWithdrawalTx(tx.hash);
+    await tx.wait(1);
+    setWithdrawn(true);
+  };
+
   return (
     <div className="menu">
       <div>
@@ -19,6 +34,23 @@ const Menu: FunctionComponent = () => {
       <div>
         {!!network ? (
           <>
+            {account && payees.find(p => p.address == account)?.balance ? (
+              <>
+                {!withdrawalTx ? (
+                  <button className="withdraw" onClick={withdraw}>
+                    Withdraw Funds
+                  </button>
+                ) : !withdrawn ? (
+                  <div className="withdraw">Withdrawing...</div>
+                ) : (
+                  <div className="withdraw">Done!</div>
+                )}
+              </>
+            ) : payees.find(p => p.address == account) ? (
+              <div className="withdraw">Your balance is 0.</div>
+            ) : (
+              <div className="no-account">No account in this Bank.</div>
+            )}
             <div className="account">
               {account?.slice(0, 6)}...{account?.slice(-4)}
             </div>
@@ -29,7 +61,7 @@ const Menu: FunctionComponent = () => {
             type="button"
             onClick={() => connect(getWalletProviderOptions())}
           >
-            Connect Wallet
+            Connect Wallet to Withdraw
           </button>
         )}
       </div>
@@ -61,7 +93,10 @@ const Menu: FunctionComponent = () => {
           line-height: 1.4em;
           font-size: 14px;
         }
-        .mint {
+        .withdraw {
+          margin-bottom: 20px;
+        }
+        .no-account {
           margin-bottom: 20px;
         }
       `}</style>
