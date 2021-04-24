@@ -1,9 +1,11 @@
 const IPFS = require('ipfs');
 const fs = require('fs/promises');
-const { resolve } = require('path');
+const path = require('path');
+
+const repoPath = process.env.IPFS_PATH;
 
 let node;
-IPFS.create().then(_node => {
+IPFS.create({ repo: repoPath }).then(_node => {
   node = _node;
 });
 
@@ -31,7 +33,7 @@ const getFiles = async dir => {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
   const files = await Promise.all(
     dirents.map(dirent => {
-      const res = resolve(dir, dirent.name);
+      const res = path.resolve(dir, dirent.name);
       return dirent.isDirectory() ? getFiles(res) : res;
     })
   );
